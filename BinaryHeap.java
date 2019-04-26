@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException;
 
 public class BinaryHeap {
     private int[] data;
@@ -44,8 +45,8 @@ public class BinaryHeap {
     public void shiftdown(int current_node){
 
         //is a leaf should i do this?
-        // if(data[current] == -1)
-        //     return;
+        if(data[current_node] == -1)
+            return;
 
         //has two children
         int right= get_RightChild(current_node);
@@ -66,8 +67,6 @@ public class BinaryHeap {
                     current_node = get_RightChild(current_node);
                     shiftdown(current_node);
                 }
-
-                swap(data, getParent(current_node), left);
             }
         }
         //has one child-> left
@@ -87,12 +86,12 @@ public class BinaryHeap {
     }
 
     //insert item into heap giving priority to the smallest number
-    public void insert(int item){
+    public void add(int item){
         if(size == data.length)
             grow_array();
         data[size++]= item;
         int current_node = size-1;
-        while(data[getParent(current_node)] > data[current_node] && getParent(current_node)>=0){
+        while(getParent(current_node)>=0 && data[getParent(current_node)] > data[current_node]){
             swap(data, current_node, getParent(current_node));
             current_node = getParent(current_node);
         }
@@ -101,7 +100,7 @@ public class BinaryHeap {
     //remove smallest element in the heap
     public int remove (){
         if(size==0)
-            return -1;
+            throw new NoSuchElementException();
         swap(data, size-1, 0);
         --size;
         if(size > 0){
